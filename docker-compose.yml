@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+    - "127.0.0.1:8471:8470"
+    volumes:
+      - ./back/projects.json:/app/projects.json
+      - ./back/skills.json:/app/skills.json
+      - ./back/users.json:/app/users.json
+      - ./back/tasks.json:/app/tasks.json
+      - ./back/forms.json:/app/forms.json
+      - ./back/messages.json:/app/messages.json
+    environment:
+      - ENVIRONMENT=development
+
+  nginx:
+    image: nginx:latest
+    ports:
+    - "80:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
